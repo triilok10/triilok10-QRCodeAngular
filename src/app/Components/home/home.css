@@ -45,8 +45,6 @@ body {
     max-width: 600px;
     padding: 3rem 2rem; /* Adjusted padding for a cleaner look */
     background: var(--light-violet-bg); /* Solid light violet background */
-    border-radius: 1.5rem; /* Slightly larger border-radius */
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05); /* Soft shadow for the content box */
 }
 
 @media (min-width: 992px) {
@@ -101,7 +99,6 @@ body {
 }
 
 .btn-primary {
-    background-color: var(--primary-blue);
     color: #fff;
     border: 1px solid var(--primary-blue);
     box-shadow: 0 5px 15px rgba(91, 68, 255, 0.3);
