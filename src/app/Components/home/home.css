@@ -1,0 +1,66 @@
+:root {
+  --primary-color: #007bff;
+  --secondary-color: #6c757d;
+  --text-color: #495057;
+}
+
+body {
+  font-family: 'Inter', sans-serif; /* A more modern font choice */
+}
+
+/* Custom styling for the app badges */
+.app-badge {
+  display: inline-block;
+  padding: 8px 16px;
+  background-color: #f1f3f5;
+  border-radius: 50px;
+  font-size: 0.8rem;
+  color: var(--secondary-color);
+  font-weight: 500;
+  border: 1px solid #e9ecef;
+}
+
+/* Updated card container to match the hero section better */
+.digital-card {
+  width: 100%;
+  max-width: 320px;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  transition: all 0.3s ease-in-out;
+}
+
+/* Hover effect for the card */
+.digital-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+}
+
+.avatar {
+  background: linear-gradient(45deg, var(--primary-color), #0056b3);
+  color: #fff;
+  font-size: 2.25rem;
+  font-weight: 600;
+  border: 4px solid #f8f9fa;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.digital-card h5 {
+  color: var(--text-color);
+  font-weight: 700;
+}
+
+.digital-card .btn-primary {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.digital-card .btn-outline-secondary {
+  border-color: var(--secondary-color);
+  color: var(--secondary-color);
+}
+
+.digital-card .btn-outline-secondary:hover {
+  background-color: var(--secondary-color);
+  color: #fff;
+}
