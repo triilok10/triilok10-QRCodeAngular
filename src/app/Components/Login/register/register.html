@@ -123,7 +123,26 @@
           </div>
         </div>
 
-        <div class="mb-4"></div>
+        <!-- Terms & Conditions Checkbox -->
+        <div class="form-check mb-4">
+          <input
+            type="checkbox"
+            id="terms"
+            class="form-check-input"
+            formControlName="termsAgreed"
+          />
+          <label for="terms" class="form-check-label text-muted">
+            I agree to the
+            <a
+              href="#"
+              data-bs-toggle="modal"
+              data-bs-target="#termsModal"
+              class="text-primary fw-semibold"
+              >Terms & Conditions</a
+            >
+          </label>
+        </div>
+
         <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold shadow-sm">
           <i class="bi bi-person-plus"></i> Register
         </button>
@@ -141,8 +160,42 @@
 
       <p class="mt-4 text-center text-muted">
         Already have an account?
-        <a href="#" class="text-primary fw-semibold">Sign In</a>
+        <a href="/login" class="text-primary fw-semibold">Sign In</a>
       </p>
+    </div>
+  </div>
+</div>
+
+<!-- Terms & Conditions Modal -->
+<div
+  class="modal fade"
+  id="termsModal"
+  tabindex="-1"
+  aria-labelledby="termsModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content rounded-3">
+      <div class="modal-header">
+        <h5 class="modal-title fw-bold" id="termsModalLabel">Terms & Conditions</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>
+          By creating a QR profile, you agree to share your information securely. Please read these
+          terms carefully:
+        </p>
+        <ul>
+          <li>Your QR code will contain the information you choose to share.</li>
+          <li>You are responsible for keeping your account secure.</li>
+          <li>Do not share sensitive information unless required.</li>
+          <li>Our platform ensures your data is encrypted and safe.</li>
+        </ul>
+        <p class="mb-0">For detailed policies, please contact our support team.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
     </div>
   </div>
 </div>

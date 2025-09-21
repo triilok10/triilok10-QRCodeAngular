@@ -1,3 +1,4 @@
+import { Toastr } from './../../../Service/toastr';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
 import { Component, computed, signal } from '@angular/core';
@@ -14,7 +15,7 @@ import { apiConfig } from '../../../Global/apiConfig';
 export class Login {
   apiUrl = apiConfig.apiUrl;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private toastr: Toastr) {}
 
   //Reactive Form
   loginForm = new FormGroup({
@@ -25,16 +26,19 @@ export class Login {
   onSubmit() {
 
     if (this.loginForm.valid) {
+
+
       const headers = new HttpHeaders({
         'Content-Type': 'application/json',
       });
 
       this.http.post<any>(`${this.apiUrl}Auth/login`, this.loginForm.value, { headers }).subscribe({
         next: (res) => {
-          console.log('Login success:', res);
+          this.toastr.showSuccess('Login successful!');
         },
         error: (err) => {
           console.error('Login failed:', err);
+          this.toastr.showError('Login failed. Please check your credentials.');
         },
       });
     }
