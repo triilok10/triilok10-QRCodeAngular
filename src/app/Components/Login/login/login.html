@@ -1,1 +1,82 @@
-<p>login works!</p>
+<div class="container-fluid min-vh-100 d-flex align-items-center justify-content-center bg-light">
+  <div class="row w-100 shadow rounded-4 overflow-hidden bg-white" style="max-width: 900px;">
+
+    <!-- Left Section -->
+    <div class="col-md-6 d-flex flex-column justify-content-center p-5 bg-primary text-white">
+      <h2 class="fw-bold mb-3">Share Your Identity with QR</h2>
+      <p class="mb-4">
+        Create your digital QR profile, share it instantly, and let others scan to view your complete details in seconds.
+        Simple, secure, and fast.
+      </p>
+      <img src="assets/qr-illustration.png" class="img-fluid mt-auto" alt="QR Illustration" />
+    </div>
+
+    <!-- Right Section -->
+    <div class="col-md-6 p-5">
+      <h3 class="fw-bold mb-2">Sign Up</h3>
+      <p class="text-muted mb-4">Create your QR identity in just a few steps.</p>
+
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <!-- Email -->
+        <div class="mb-3">
+          <label for="username" class="form-label">Email</label>
+          <input
+            type="email"
+            id="username"
+            class="form-control"
+            placeholder="Enter your email"
+            formControlName="Username"
+          />
+        </div>
+
+        <!-- Password -->
+        <div class="mb-3">
+          <label for="password" class="form-label">Password</label>
+          <input
+            type="password"
+            id="password"
+            class="form-control"
+            placeholder="Enter password"
+            formControlName="Password"
+          />
+        </div>
+
+        <!-- Terms -->
+        <div class="form-check mb-4">
+          <input type="checkbox" id="terms" class="form-check-input" />
+          <label for="terms" class="form-check-label">
+            I agree to the <a href="#" class="text-primary text-decoration-none">Terms & Conditions</a>
+          </label>
+        </div>
+
+        <!-- Button -->
+        <button type="submit" class="btn btn-primary w-100 py-2">
+          Sign Up
+        </button>
+      </form>
+
+      <!-- Divider -->
+      <div class="d-flex align-items-center my-3">
+        <hr class="flex-grow-1" />
+        <span class="mx-2 text-muted">or</span>
+        <hr class="flex-grow-1" />
+      </div>
+
+      <!-- Social Buttons -->
+      <div class="d-flex gap-2">
+        <button class="btn btn-outline-dark w-50">
+          <i class="bi bi-google"></i> Google
+        </button>
+        <button class="btn btn-outline-dark w-50">
+          <i class="bi bi-apple"></i> Apple
+        </button>
+      </div>
+
+      <!-- Sign In link -->
+      <p class="mt-4 text-center">
+        Already have an account?
+        <a href="#" class="text-primary text-decoration-none">Sign In</a>
+      </p>
+    </div>
+  </div>
+</div>
