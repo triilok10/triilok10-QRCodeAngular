@@ -30,6 +30,20 @@
                 formControlName="Username"
               />
             </div>
+            <div
+              *ngIf="registerForm.get('Username')?.invalid && registerForm.get('Username')?.touched"
+              class="text-danger mt-1"
+            >
+              <small *ngIf="registerForm.get('Username')?.errors?.['required']"
+                >Username is required.</small
+              >
+              <small *ngIf="registerForm.get('Username')?.errors?.['minlength']"
+                >Username must be at least 8 characters long.</small
+              >
+              <small *ngIf="registerForm.get('Username')?.errors?.['specialCharsOrSpaces']"
+                >No spaces or special characters allowed.</small
+              >
+            </div>
           </div>
           <div class="col-md-6 mb-3">
             <div class="input-group">
@@ -40,6 +54,12 @@
                 placeholder="Full Name *"
                 formControlName="Fullname"
               />
+            </div>
+            <div
+              *ngIf="registerForm.get('Fullname')?.invalid && registerForm.get('Fullname')?.touched"
+              class="text-danger mt-1"
+            >
+              <small>Full Name is required.</small>
             </div>
           </div>
         </div>
@@ -58,6 +78,17 @@
                 formControlName="Email"
               />
             </div>
+            <div
+              *ngIf="registerForm.get('Email')?.invalid && registerForm.get('Email')?.touched"
+              class="text-danger mt-1"
+            >
+              <small *ngIf="registerForm.get('Email')?.errors?.['required']"
+                >Email is required.</small
+              >
+              <small *ngIf="registerForm.get('Email')?.errors?.['email']"
+                >Enter a valid email address.</small
+              >
+            </div>
           </div>
           <div class="col-md-6 mb-3">
             <div class="input-group">
@@ -68,6 +99,17 @@
                 placeholder="Mobile Number *"
                 formControlName="MobileNo"
               />
+            </div>
+            <div
+              *ngIf="registerForm.get('MobileNo')?.invalid && registerForm.get('MobileNo')?.touched"
+              class="text-danger mt-1"
+            >
+              <small *ngIf="registerForm.get('MobileNo')?.errors?.['required']"
+                >Mobile Number is required.</small
+              >
+              <small *ngIf="registerForm.get('MobileNo')?.errors?.['pattern']"
+                >Mobile number must be 10 digits and start with 6, 7, 8, or 9.</small
+              >
             </div>
           </div>
         </div>
@@ -86,9 +128,19 @@
                 formControlName="ProfileImage"
               />
             </div>
-            <div *ngIf="registerForm.get('ProfileImage')?.invalid && registerForm.get('ProfileImage')?.touched" class="text-danger mt-1">
-                <small *ngIf="registerForm.get('ProfileImage')?.errors?.['fileType']">Invalid file type (only .jpg/.jpeg)</small>
-                <small *ngIf="registerForm.get('ProfileImage')?.errors?.['fileSize']">File size exceeds 2MB</small>
+            <div
+              *ngIf="
+                registerForm.get('ProfileImage')?.invalid &&
+                registerForm.get('ProfileImage')?.touched
+              "
+              class="text-danger mt-1"
+            >
+              <small *ngIf="registerForm.get('ProfileImage')?.errors?.['fileType']"
+                >Invalid file type (only .jpg/.jpeg)</small
+              >
+              <small *ngIf="registerForm.get('ProfileImage')?.errors?.['fileSize']"
+                >File size exceeds 2MB.</small
+              >
             </div>
           </div>
           <div class="col-md-6 mb-3">
@@ -96,10 +148,16 @@
               <span class="input-group-text bg-light"><i class="bi bi-geo-alt"></i></span>
               <select class="form-select" formControlName="State">
                 <option value="" disabled selected>Select State *</option>
-                <option value="Rajasthan">Rajasthan</option>
-                <option value="Maharashtra">Maharashtra</option>
-                <option value="Delhi">Delhi</option>
+                <option value="1">Rajasthan</option>
+                <option value="2">Maharashtra</option>
+                <option value="3">Delhi</option>
               </select>
+            </div>
+            <div
+              *ngIf="registerForm.get('State')?.invalid && registerForm.get('State')?.touched"
+              class="text-danger mt-1"
+            >
+              <small>State is required.</small>
             </div>
           </div>
         </div>
@@ -118,6 +176,21 @@
                 formControlName="Password"
               />
             </div>
+            <div
+              *ngIf="registerForm.get('Password')?.invalid && registerForm.get('Password')?.touched"
+              class="text-danger mt-1"
+            >
+              <small *ngIf="registerForm.get('Password')?.errors?.['required']"
+                >Password is required.</small
+              >
+              <small *ngIf="registerForm.get('Password')?.errors?.['minlength']"
+                >Password must be at least 6 characters long.</small
+              >
+              <small *ngIf="registerForm.get('Password')?.errors?.['pattern']"
+                >Password must contain at least one uppercase letter, one lowercase letter, one
+                number, and one special character.</small
+              >
+            </div>
           </div>
           <div class="col-md-6 mb-3">
             <div class="input-group">
@@ -128,6 +201,21 @@
                 placeholder="Confirm Password *"
                 formControlName="ConfirmPassword"
               />
+            </div>
+            <div
+              *ngIf="
+                registerForm.get('ConfirmPassword')?.invalid &&
+                registerForm.get('ConfirmPassword')?.touched
+              "
+              class="text-danger mt-1"
+            >
+              <small>Confirm Password is required.</small>
+            </div>
+            <div
+              *ngIf="registerForm.errors?.['passwordMismatch'] && registerForm.get('ConfirmPassword')?.touched"
+              class="text-danger mt-1"
+            >
+              <small>Password and Confirm Password must match.</small>
             </div>
           </div>
         </div>
@@ -150,6 +238,14 @@
             >
             <span class="text-danger">*</span>
           </label>
+        </div>
+        <div
+          *ngIf="
+            registerForm.get('termsAgreed')?.invalid && registerForm.get('termsAgreed')?.touched
+          "
+          class="text-danger mt-1"
+        >
+          <small>You must agree to the Terms & Conditions.</small>
         </div>
 
         <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold shadow-sm">

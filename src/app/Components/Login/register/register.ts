@@ -1,8 +1,37 @@
 import { Toastr } from './../../../Service/toastr';
 import { CommonModule } from '@angular/common';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  ValidationErrors,
+  ValidatorFn,
+  Validators,
+} from '@angular/forms';
+import { apiConfig } from '../../../Global/apiConfig';
+
+// Custom validator to check if passwords match
+export const passwordMatchValidator: ValidatorFn = (
+  control: AbstractControl
+): ValidationErrors | null => {
+  const password = control.get('Password');
+  const confirmPassword = control.get('ConfirmPassword');
+  return password && confirmPassword && password.value !== confirmPassword.value
+    ? { passwordMismatch: true }
+    : null;
+};
+
+// Custom validator to prevent spaces and special characters in username
+export const noSpecialCharsOrSpaces: ValidatorFn = (
+  control: AbstractControl
+): ValidationErrors | null => {
+  const forbidden = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
+  const hasForbiddenChars = forbidden.test(control.value) || control.value?.includes(' ');
+  return hasForbiddenChars ? { specialCharsOrSpaces: true } : null;
+};
 
 @Component({
   selector: 'app-register',
@@ -12,34 +41,43 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
   styleUrl: './register.css',
 })
 export class Register {
+  apiUrl = apiConfig.apiUrl;
+
+  //Constructor to Inject the Services
   constructor(private http: HttpClient, private toastr: Toastr) {}
 
-  formData = {
-    Username: '',
-    Fullname: '',
-    ProfileImageBase64: '',
-    ProfileImageName: '',
-    Password: '',
-    ConfirmPassword: '',
-    Email: '',
-    MobileNo: '',
-    State: '',
-  };
-
-  // Reactive Form
-  registerForm = new FormGroup({
-    Username: new FormControl('', [Validators.required, Validators.minLength(3)]),
-    Fullname: new FormControl('', [Validators.required]),
-    ProfileImage: new FormControl(null),
-    Password: new FormControl('', [Validators.required, Validators.minLength(6)]),
-    ConfirmPassword: new FormControl('', [Validators.required]),
-    Email: new FormControl('', [Validators.required, Validators.email]),
-    MobileNo: new FormControl('', [Validators.required, Validators.pattern('^[0-9]{10}$')]),
-    State: new FormControl('', [Validators.required]),
-    termsAgreed: new FormControl(false, [Validators.requiredTrue]),
-    ProfileImageBase64: new FormControl(''),
-    ProfileImageName: new FormControl(''),
-  });
+  // Reactive Form with tighter validations
+  registerForm = new FormGroup(
+    {
+      Username: new FormControl('', [
+        Validators.required,
+        Validators.minLength(8),
+        noSpecialCharsOrSpaces, // Custom validator for username
+      ]),
+      Fullname: new FormControl('', [Validators.required]),
+      ProfileImage: new FormControl(null),
+      ProfileImageBase64: new FormControl(''),
+      ProfileImageName: new FormControl(''),
+      Password: new FormControl('', [
+        Validators.required,
+        Validators.minLength(6),
+        Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,16}$'), // Example for strong password
+      ]),
+      ConfirmPassword: new FormControl('', [Validators.required]),
+      Email: new FormControl('', [
+        Validators.required,
+        Validators.email,
+        Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$'), // Basic email pattern
+      ]),
+      MobileNo: new FormControl('', [
+        Validators.required,
+        Validators.pattern('^[6-9][0-9]{9}$'), // 10 digits starting with 6-9
+      ]),
+      State: new FormControl('', [Validators.required]),
+      termsAgreed: new FormControl(false),
+    },
+    { validators: passwordMatchValidator }
+  ); // Group-level validator for password match
 
   onFileChange(event: any) {
     const file = event.target.files[0];
@@ -54,7 +92,7 @@ export class Register {
         return;
       }
 
-      const maxSize = 2 * 1024 * 1024;
+      const maxSize = 2 * 1024 * 1024; // 2 MB
       if (file.size > maxSize) {
         profileImageControl?.setErrors({ fileSize: true });
         return;
@@ -63,53 +101,46 @@ export class Register {
       const reader = new FileReader();
       reader.onload = () => {
         const base64String = (reader.result as string).split(',')[1];
-
-        this.formData.ProfileImageBase64 = base64String;
-        this.formData.ProfileImageName = file.name;
-
         this.registerForm.patchValue({
-          ProfileImageBase64: this.formData.ProfileImageBase64,
-          ProfileImageName: this.formData.ProfileImageName,
+          ProfileImageBase64: base64String,
+          ProfileImageName: file.name,
         });
       };
       reader.readAsDataURL(file);
     } else {
-      this.formData.ProfileImageBase64 = '';
-      this.formData.ProfileImageName = '';
+      this.registerForm.patchValue({
+        ProfileImageBase64: '',
+        ProfileImageName: '',
+      });
     }
   }
 
   onSubmit() {
-    if (
-      this.registerForm.get('Username')?.value == '' ||
-      this.registerForm.get('Username')?.value === null
-    ) {
-      this.toastr.showError('Username is Mandatory.');
-      this.registerForm.get('Username')?.setErrors({ mismatch: true });
-      return;
-    }
-    if (
-      this.registerForm.get('Password')?.value !== this.registerForm.get('ConfirmPassword')?.value
-    ) {
-      this.toastr.showError('Password and Confirm Password do not match.');
-      this.registerForm.get('ConfirmPassword')?.setErrors({ mismatch: true });
-      return;
-    } else if (
-      this.registerForm.get('Password')?.value === this.registerForm.get('ConfirmPassword')?.value
-    ) {
-      this.registerForm.get('ConfirmPassword')?.setErrors(null);
-    }
-
     if (this.registerForm.valid) {
-      console.log('Form is valid and ready to submit:', this.formData);
+      if (this.registerForm.get('termsAgreed')?.value == false) {
+        this.toastr.showError('You must agree to the terms and conditions.');
+        return;
+      }
 
-      // Here you would make your HTTP call to the backend API:
-      // this.http.post('YOUR_API_ENDPOINT', this.formData).subscribe(...)
+      const headers = new HttpHeaders({
+        'Content-Type': 'application/json',
+      });
+
+      //Call the API to register the User
+      this.http
+        .post<any>(`${this.apiUrl}Auth/Register`, this.registerForm.value, {headers})
+        .subscribe({
+          next: (res) => {
+            if (res.state == 0) {
+              this.toastr.showSuccess('Registration successful!');
+            } else if (res.state == 1) {
+              this.toastr.showError(res.errorMessage || 'Registration failed. Please try again.');
+            }
+          },
+        });
     } else {
-      console.log('Form is invalid. Please check the fields.');
-      this.toastr.showError('Form is invalid. Please check the fields.');
-      // Mark all controls as touched to show validation errors
       this.registerForm.markAllAsTouched();
+      this.toastr.showError('Please correct the errors in the form before submitting.');
     }
   }
 }
