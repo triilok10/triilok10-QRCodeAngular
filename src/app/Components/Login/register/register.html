@@ -26,7 +26,7 @@
               <input
                 type="text"
                 class="form-control"
-                placeholder="Username"
+                placeholder="Username *"
                 formControlName="Username"
               />
             </div>
@@ -37,7 +37,7 @@
               <input
                 type="text"
                 class="form-control"
-                placeholder="Full Name"
+                placeholder="Full Name *"
                 formControlName="Fullname"
               />
             </div>
@@ -54,7 +54,7 @@
               <input
                 type="email"
                 class="form-control"
-                placeholder="Email"
+                placeholder="Email *"
                 formControlName="Email"
               />
             </div>
@@ -65,7 +65,7 @@
               <input
                 type="text"
                 class="form-control"
-                placeholder="Mobile Number"
+                placeholder="Mobile Number *"
                 formControlName="MobileNo"
               />
             </div>
@@ -79,14 +79,23 @@
           <div class="col-md-6 mb-3">
             <div class="input-group">
               <span class="input-group-text bg-light"><i class="bi bi-image"></i></span>
-              <input type="file" class="form-control" formControlName="ProfileImage" />
+              <input
+                type="file"
+                class="form-control"
+                (change)="onFileChange($event)"
+                formControlName="ProfileImage"
+              />
+            </div>
+            <div *ngIf="registerForm.get('ProfileImage')?.invalid && registerForm.get('ProfileImage')?.touched" class="text-danger mt-1">
+                <small *ngIf="registerForm.get('ProfileImage')?.errors?.['fileType']">Invalid file type (only .jpg/.jpeg)</small>
+                <small *ngIf="registerForm.get('ProfileImage')?.errors?.['fileSize']">File size exceeds 2MB</small>
             </div>
           </div>
           <div class="col-md-6 mb-3">
             <div class="input-group">
               <span class="input-group-text bg-light"><i class="bi bi-geo-alt"></i></span>
               <select class="form-select" formControlName="State">
-                <option value="" disabled selected>Select State</option>
+                <option value="" disabled selected>Select State *</option>
                 <option value="Rajasthan">Rajasthan</option>
                 <option value="Maharashtra">Maharashtra</option>
                 <option value="Delhi">Delhi</option>
@@ -105,7 +114,7 @@
               <input
                 type="password"
                 class="form-control"
-                placeholder="Password"
+                placeholder="Password *"
                 formControlName="Password"
               />
             </div>
@@ -116,14 +125,13 @@
               <input
                 type="password"
                 class="form-control"
-                placeholder="Confirm Password"
+                placeholder="Confirm Password *"
                 formControlName="ConfirmPassword"
               />
             </div>
           </div>
         </div>
 
-        <!-- Terms & Conditions Checkbox -->
         <div class="form-check mb-4">
           <input
             type="checkbox"
@@ -140,6 +148,7 @@
               class="text-primary fw-semibold"
               >Terms & Conditions</a
             >
+            <span class="text-danger">*</span>
           </label>
         </div>
 
@@ -166,7 +175,6 @@
   </div>
 </div>
 
-<!-- Terms & Conditions Modal -->
 <div
   class="modal fade"
   id="termsModal"

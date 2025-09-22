@@ -24,21 +24,24 @@ export class Login {
   });
 
   onSubmit() {
-
     if (this.loginForm.valid) {
-
-
       const headers = new HttpHeaders({
         'Content-Type': 'application/json',
       });
 
       this.http.post<any>(`${this.apiUrl}Auth/login`, this.loginForm.value, { headers }).subscribe({
         next: (res) => {
-          this.toastr.showSuccess('Login successful!');
+          debugger;
+
+          if (res.state == 0) {
+            this.toastr.showSuccess('Login successful!');
+          } else if (res.state == 1) {
+            this.toastr.showError('Login failed. Please check your credentials.');
+          }
         },
         error: (err) => {
           console.error('Login failed:', err);
-          this.toastr.showError('Login failed. Please check your credentials.');
+          this.toastr.showError('Login failed. Please try again later.');
         },
       });
     }
