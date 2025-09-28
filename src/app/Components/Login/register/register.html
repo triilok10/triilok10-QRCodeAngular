@@ -145,14 +145,17 @@
           </div>
           <div class="col-md-6 mb-3">
             <div class="input-group">
-              <span class="input-group-text bg-light"><i class="bi bi-geo-alt"></i></span>
+              <span class="input-group-text bg-light">
+                <i class="bi bi-geo-alt"></i>
+              </span>
               <select class="form-select" formControlName="State">
                 <option value="" disabled selected>Select State *</option>
-                <option value="1">Rajasthan</option>
-                <option value="2">Maharashtra</option>
-                <option value="3">Delhi</option>
+                <option *ngFor="let state of StateList" [value]="state.stateID">
+                  {{ state.stateName }}
+                </option>
               </select>
             </div>
+
             <div
               *ngIf="registerForm.get('State')?.invalid && registerForm.get('State')?.touched"
               class="text-danger mt-1"

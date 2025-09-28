@@ -1,7 +1,7 @@
 import { Toastr } from './../../../Service/toastr';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   AbstractControl,
   FormControl,
@@ -40,11 +40,17 @@ export const noSpecialCharsOrSpaces: ValidatorFn = (
   templateUrl: './register.html',
   styleUrl: './register.css',
 })
-export class Register {
+export class Register implements OnInit {
   apiUrl = apiConfig.apiUrl;
+  StateList: any[] = [];
 
   //Constructor to Inject the Services
   constructor(private http: HttpClient, private toastr: Toastr) {}
+
+  //When Page Loads, NgOnit Calls
+  ngOnInit(): void {
+    this.getStateList();
+  }
 
   // Reactive Form with tighter validations
   registerForm = new FormGroup(
@@ -128,7 +134,7 @@ export class Register {
 
       //Call the API to register the User
       this.http
-        .post<any>(`${this.apiUrl}Auth/Register`, this.registerForm.value, {headers})
+        .post<any>(`${this.apiUrl}Auth/Register`, this.registerForm.value, { headers })
         .subscribe({
           next: (res) => {
             if (res.state == 0) {
@@ -142,5 +148,16 @@ export class Register {
       this.registerForm.markAllAsTouched();
       this.toastr.showError('Please correct the errors in the form before submitting.');
     }
+  }
+
+  // Below code is used to get the  StateList
+  getStateList() {
+    this.http.get<any>(`${this.apiUrl}Common/GetStateList`).subscribe({
+      next: (res) => {
+        if (res.data != null) {
+          this.StateList = res['data'];
+        }
+      },
+    });
   }
 }
